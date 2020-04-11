@@ -18,8 +18,8 @@ def FieldToFile (field, size, origin, steps, filename):
 	for x in range (steps):
 		for y in range (steps):
 			for z in range (steps):
-				fieldValue = field.getField (cr.Vector3d (x / steps * size.x, y / steps * size.y, z / steps * size.z))
-				output_file.write(struct.pack('ddd', fieldValue.x, fieldValue.y, fieldValue.z))
+				fieldValue = field.getField (cr.Vector3d (float(x) / steps * size.x, float(y) / steps * size.y, float(z) / steps * size.z))
+				output_file.write(struct.pack('ddd', fieldValue.x, fieldValue.y, fieldValue.z)) 
 	
 	output_file.close()
 
@@ -40,7 +40,8 @@ def FileToGrid (filename):
 		return 0;
 		
 	buf = struct.unpack('ccdddIdddc', bufstr)
-	size = cr.Vector3d (buf[2], buf[3], buf[4])
+	size = cr.Vector3d (buf[2], buf[3], buf[4]) 
+	
 	origin = cr.Vector3d (buf[6], buf[7], buf[8])
 	steps = buf[5]
 		
@@ -55,10 +56,10 @@ def FileToGrid (filename):
 			for z in range (steps):
 				bufstr = output_file.read(struct.calcsize('ddd'))
 				buf = struct.unpack('ddd', bufstr)
-				retGrid.setValue (x, y, z, cr.Vector3f(buf[0], buf[1], buf[2])) #I've np idea why VectorGrid is Grid<Vector3<float>>
-	
+				retGrid.setValue (x, y, z, cr.Vector3f(buf[0], buf[1], buf[2])) #I've no idea why VectorGrid is Grid<Vector3<float>>
+				
 	output_file.close()
-
+	return retGrid
 #-----------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -69,4 +70,6 @@ if __name__ == "__main__":
     FieldToFile (tstfield,  cr.Vector3d (1 * cr.pc, 1 * cr.pc, 1 * cr.pc), 
     						cr.Vector3d (0, 0, 0), 10, test_file_name)
     
-    tstload = FileToGrid (test_file_name)
+    tstloadGrid = FileToGrid (test_file_name)
+    tstloadField = cr.MagneticFieldGrid(tstloadGrid)
+    print tstloadField.getField(cr.Vector3d(0, 0, 0))

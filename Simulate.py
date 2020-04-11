@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from crpropa import *
+import Field2File as f2f
+
+print 'started'
 
 #турбулентное  поле
 origin = Vector3d (0, 0, 0)
@@ -28,9 +31,13 @@ Bfield.addField (B_const_field)
 
 print 'end B_field'
 
+f2f.FieldToFile (Bfield, Vector3d(n * spacing, n * spacing, n * spacing), origin, 10, "magnetic_field.mf")
+
+print 'B_field writed to file magnetic_field.mf'
+
 sim = ModuleList()
 sim.add (PropagationCK (Bfield, 10e-11, 10*au, 1*pc))
-sim.add (MaximumTrajectoryLength (10*pc))
+sim.add (MaximumTrajectoryLength (100*pc))
 output = TextOutput ('trajectory.txt', Output.Trajectory3D)
 sim.add (output)
 
@@ -48,5 +55,7 @@ sim.setShowProgress (True)
 sim.run (source, 2)
 
 output.close()
+
+
 
 print 'end simulation'
