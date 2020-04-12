@@ -12,11 +12,11 @@ import Field2File as f2f
 
 print 'started'
 
-data = genfromtxt('trajectory.txt', names=True)
+data = genfromtxt('my_trajectory.txt', names=True)
 
 print 'data loaded'
 # trajectory points
-L, x_d, y_d, z_d = data['D'],data['X']*Mpc, data['Y']*Mpc, data['Z']*Mpc
+x_d, y_d, z_d = data['X'], data['Y'], data['Z']
 
 Bfield = MagneticFieldList()
 
@@ -28,8 +28,13 @@ Bfield.addField (MagneticFieldGrid (vGrid))
 
 print 'field loaded'
 
-N = 15# samples per direction
-samples = (np.linspace(0*kpc, 0.1*kpc, N, endpoint=True))
+N = 300# samples per direction
+
+start_r = -0.1*kpc
+end_r   =  0.1*kpc
+
+samples = (np.linspace(start_r, end_r, N, endpoint=True))
+
 B = np.zeros((N,N,N))
 Bx = np.zeros((N,N,N))
 By = np.zeros((N,N,N))
@@ -38,7 +43,7 @@ X_pos = np.zeros((N,N,N))
 Y_pos = np.zeros((N,N,N))
 Z_pos = np.zeros((N,N,N))
 
-X_, Y_, Z_ = np.mgrid[0*kpc:0.1*kpc:(N*1j), 0*kpc:0.1*kpc:(N*1j), 0*kpc:0.1*kpc:(N*1j)]
+X_, Y_, Z_ = np.mgrid[start_r:end_r:(N*1j), start_r:end_r:(N*1j), start_r:end_r:(N*1j)]
 
 for i, xx in enumerate(samples):
 	for j, yy in enumerate(samples):
@@ -51,7 +56,8 @@ for i, xx in enumerate(samples):
 		
 print 'magnetic fields view'
 
-tr= mlab.plot3d(x_d,y_d,z_d)
+tr = mlab.plot3d(x_d,y_d,z_d)
+#start_pos = mlab.
 u = mlab.flow(X_,Y_,Z_,Bx,By,Bz,seedtype='point')
 
 print kpc
