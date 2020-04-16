@@ -10,6 +10,9 @@ from mayavi import mlab
 from crpropa import *
 import Field2File as f2f
 
+if (not os.path.isdir("output")): os.mkdir("output")
+os.chdir("output")
+
 print 'started'
 
 data = genfromtxt('my_trajectory.txt', names=True)

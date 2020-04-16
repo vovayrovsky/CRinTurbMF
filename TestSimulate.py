@@ -18,6 +18,9 @@ def createParser ():
 
 #-----------------------------------------------------------------------------------------------------------------------------------
 
+if (not os.path.isdir("output")): os.mkdir("output")
+os.chdir("output")
+
 cargpars = createParser();
 params = cargpars.parse_args(sys.argv[1:])
 

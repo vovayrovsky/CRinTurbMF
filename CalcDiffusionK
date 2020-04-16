@@ -22,6 +22,9 @@ def MakeGraph (X, Y, fname):
 
 #-----------------------------------------------------------------------------------------------------------------------------------
 
+if (not os.path.isdir("output")): os.mkdir("output")
+os.chdir("output")
+
 print 'started'
 
 i,L,D_x,D_y,mu,x,y,z = np.genfromtxt('my_diff_trajectory.txt', unpack=True, skip_footer=1)
