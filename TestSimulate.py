@@ -7,6 +7,7 @@ from DataSavers import *
 
 import sys
 import argparse
+import os
 
 #-----------------------------------------------------------------------------------------------------------------------------------
 
@@ -57,7 +58,7 @@ print 'end B_field'
 sim = ModuleList()
 
 if (params.mfield):
-	f2f.FieldToFile (Bfield, Vector3d(n * spacing, n * spacing, n * spacing), origin, 200, "magnetic_field.mf")
+	f2f.FieldToFile (Bfield, Vector3d(n * spacing, n * spacing, n * spacing), origin, 30, "magnetic_field.mf")
 	print 'B_field writed to file magnetic_field.mf'
 	
 	myoutput = StepOutput ('my_trajectory.txt', 100)

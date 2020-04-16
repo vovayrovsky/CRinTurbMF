@@ -28,7 +28,6 @@ class StepOutput(cr.Module):
 	def __del__(self):
 		if (not self.fout.closed):
 			self.fout.close()
-		del cr.Module
 		
 #-----------------------------------------------------------------------------------------------------------------------------------
 
@@ -89,7 +88,6 @@ class DiffOutput(cr.Module):
 	def __del__(self):
 		if (not self.fout.closed):
 			self.fout.close()
-		del cr.Module
 #-----------------------------------------------------------------------------------------------------------------------------------
 
 if __name__ == "__main__":
