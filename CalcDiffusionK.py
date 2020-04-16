@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from pylab import *
 from mpl_toolkits.mplot3d import axes3d
 from mayavi import mlab
+import os
 
 from crpropa import *
 
