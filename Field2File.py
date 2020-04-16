@@ -64,7 +64,7 @@ def FileToGrid (filename):
 
 
 if __name__ == "__main__":
-    print "It's a libriary.\nYou'd better use python -i Field2File.py\nStarting test script"
+    print "It's a libriary.\nYou'd better use python -i Field2File.py for testing\nStarting test script"
     tstfield = cr.UniformMagneticField(cr.Vector3d (1, 0, 0))
     test_file_name = "test_magnetic_field.mf"
     FieldToFile (tstfield,  cr.Vector3d (1 * cr.pc, 1 * cr.pc, 1 * cr.pc), 
