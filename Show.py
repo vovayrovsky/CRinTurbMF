@@ -1,21 +1,23 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import numpy
-get_ipython().magic(u'matplotlib tk')
-from pylab import *
+import numpy as np
 from mpl_toolkits.mplot3d import axes3d
 from mayavi import mlab
+import os
 
 from crpropa import *
+
 import Field2File as f2f
+
+#-----------------------------------------------------------------------------------------------------------------------------------
 
 if (not os.path.isdir("output")): os.mkdir("output")
 os.chdir("output")
 
 print 'started'
 
-data = genfromtxt('my_trajectory.txt', names=True)
+data = np.genfromtxt('my_trajectory.txt', names=True)
 
 print 'data loaded'
 # trajectory points
@@ -31,7 +33,7 @@ Bfield.addField (MagneticFieldGrid (vGrid))
 
 print 'field loaded'
 
-N = 300# samples per direction
+N = 30# samples per direction
 
 start_r = -0.1*kpc
 end_r   =  0.1*kpc
