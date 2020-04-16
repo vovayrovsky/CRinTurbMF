@@ -3,34 +3,29 @@
 
 from crpropa import *
 import Field2File as f2f
+from DataSavers import * 
+
+import sys
+import argparse
 
 #-----------------------------------------------------------------------------------------------------------------------------------
 
-class MyOutput(Module):
-	def __init__ (self, fname):
-		Module.__init__ (self)
-		self.fout = open(fname, 'w')
-		self.fout.write ('#X\tY\tZ\n')
-		self.i = 0
+def createParser ():
+    parser = argparse.ArgumentParser()
+    parser.add_argument ('-mf', '--mfield', action='store_true', default = False, help = 'Enabling saving magnetic field and trajectory')
+ 
+    return parser
+
+#-----------------------------------------------------------------------------------------------------------------------------------
+
+cargpars = createParser();
+params = cargpars.parse_args(sys.argv[1:])
+
+if (params.mfield):
+	print 'started with saving magnetic field'
+else:
+	print 'started'
 	
-	def process (self, c):
-		if (self.i % 100 != 0):
-			self.i += 1
-			return
-		
-		self.i = 1	
-		x = c.current.getPosition().x
-		y = c.current.getPosition().y
-		z = c.current.getPosition().z
-		self.fout.write('%f\t%f\t%f\n'%(x, y, z))
-		
-	def close(self):
-		self.fout.close()
-		
-#-----------------------------------------------------------------------------------------------------------------------------------
-
-print 'started'
-
 #турбулентное  поле
 n = 500
 spacing = 200*au
@@ -56,18 +51,20 @@ Bfield.addField (B_const_field)
 
 print 'end B_field'
 
-f2f.FieldToFile (Bfield, Vector3d(n * spacing, n * spacing, n * spacing), origin, 200, "magnetic_field.mf")
-
-print 'B_field writed to file magnetic_field.mf'
-
 sim = ModuleList()
+
+if (params.mfield):
+	f2f.FieldToFile (Bfield, Vector3d(n * spacing, n * spacing, n * spacing), origin, 200, "magnetic_field.mf")
+	print 'B_field writed to file magnetic_field.mf'
+	
+	myoutput = StepOutput ('my_trajectory.txt', 100)
+	sim.add (myoutput)
+
+diffoutput = DiffOutput ('my_diff_trajectory.txt', 10)
+sim.add (diffoutput)
+
 sim.add (PropagationCK (Bfield, 10e-11, 10*au, 1*pc))
 sim.add (MaximumTrajectoryLength (100*pc))
-#output = TextOutput ('trajectory.txt', Output.Trajectory3D)
-myoutput = MyOutput ('my_trajectory.txt')
-
-#sim.add (output)
-sim.add (myoutput)
 
 # source setup
 source = Source()
@@ -85,7 +82,10 @@ sim.setShowProgress (True)
 sim.run (source, 1)
 
 #output.close()
-myoutput.close()
 
+if (params.mfield):
+	myoutput.close()
+	
+diffoutput.close()
 
 print 'end simulation'
