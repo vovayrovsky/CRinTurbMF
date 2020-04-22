@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from crpropa import *
-import Field2File as f2f
-from DataSavers import * 
+from crpropa import * 
 
 import numpy as np
 
@@ -13,27 +11,18 @@ import os
 
 #-----------------------------------------------------------------------------------------------------------------------------------
 
-class CaldLDistr(cr.Module):
-	def __init__ (self, max_step):
-		cr.Module.__init__ (self)
-		self.gist = np.zeros(1000)
-		self.max_step = max_step
-		#form 0 to max_step
-	
+class SaveL(Module):
+	def __init__ (self, max_step, fname):
+		Module.__init__ (self)
+		self.fout = open (fname, "w")
+		self.fout.write (str (max_step) + "\n")
+		
 	def process (self, c):
 		dl = c.getCurrentStep()
-		for i in range (1000):
-			if (i < (dl / self.max_step * 1000) and (dl / pc * 1000) <= i + 1):
-				self.gist[i] += 1
+		self.fout.write (str(dl) + "\n")
 		
-	def save (self, fname):
-		fout = open(fname, 'w')
-		fout.write ("#X\tY\n");
-		
-		for i in range (1000):
-			fout.write ("%f\t%f\n"%(float(i) / 1000., self.gist[i]))
-			
-		fout.close()
+	def close (self):
+		self.fout.close()
 
 #-----------------------------------------------------------------------------------------------------------------------------------
 
@@ -69,13 +58,10 @@ print 'end B_field'
 
 sim = ModuleList()
 
-diffoutput = DiffOutput ('my_diff_trajectory.txt', 10)
-sim.add (diffoutput)
+max_step = 0.1 * pc
 
-max_step = 0.02 * pc
-
-calcdistr = CaldLDistr(max_step)
-sim.add (calcdistr)
+lsave = SaveL(max_step, 'dl.csv')
+sim.add (lsave)
 
 sim.add (PropagationCK (Bfield, 10e-11, 10*au, 1*pc))
 sim.add (MaximumTrajectoryLength (100*pc))
@@ -91,9 +77,8 @@ source.add (SourceParticleType (nucleusId (1, 1)))
 source.add (SourceEnergy (1 * TeV))
 
 sim.setShowProgress (True)
-sim.run (source, 20)
-	
-diffoutput.close()
-calcdistr.save('distr.csv')
+sim.run (source, 300)
+
+lsave.close()
 
 print 'end simulation'
