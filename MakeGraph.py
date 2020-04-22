@@ -10,7 +10,7 @@ import sys
 #-----------------------------------------------------------------------------------------------------------------------------------
 
 def MakeGraph (X, Y, fname):
-	plt.figure (figsize = (12,12))
+	plt.figure (figsize = (24,24))
 	plt.subplot()
 	plt.bar (X, Y, width = 0.001)
 	plt.savefig (fname)
