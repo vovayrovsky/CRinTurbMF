@@ -15,9 +15,15 @@ import os
 import math
 
 #-----------------------------------------------------------------------------------------------------------------------------------
+def Log(str):
+	global logfile
+	logfile.write(str)
+	sys.stdout.write(str)
+	return
+#-----------------------------------------------------------------------------------------------------------------------------------
 
-def createParser ():
-	parser = argparse.ArgumentParser ()
+def createParser():
+	parser = argparse.ArgumentParser()
 	parser.add_argument ('-mf', '--mfield', action = 'store_true', default = False, help = 'Enabling saving turbulent part of magnetic field and trajectories for visualisation')
 	
 	parser.add_argument ('-bm', '--minB',   action = 'store', default = 0.0, type = float, help = 'starting B value')
@@ -64,15 +70,43 @@ num_of_part = params.particles
 
 #-----------------------------------------------------------------------------------------------------------------------------------
 
-
 logfile = open ("log.txt", "w")
-logfile.write ("Start logging at " + str(datetime.now()) + "\n");
-logfile.write ("Log dir is " + path + "\n\n");
+Log ("Start logging at " + str(datetime.now()) + "\n");
+Log ("Output dir is " + path + "\n\n");
 
-logfile.write ("Simulation parameters:\n");
-logfile.write ("B from "  + str(minB)  + " to " + str(maxB)  + " with " + str(stepsB)  + "steps\n")
-logfile.write ("Mu from " + str(minMu) + " to " + str(maxMu) + " with " + str(stepsMu) + "steps\n")
-logfile.write ("Saving of magnetic filed is " + ("enabled" if saveMF  else "disabled") + "\n")
+Log ("Simulation parameters:\n");
+Log ("B from "  + str(minB)  + " to " + str(maxB)  + " with " + str(stepsB)  + " steps\n")
+Log ("Mu from " + str(minMu) + " to " + str(maxMu) + " with " + str(stepsMu) + " steps\n")
+Log ("Saving of magnetic filed is " + ("enabled" if saveMF  else "disabled") + "\n\n")
 
-logfile.write ("\nEnd logging at " + str(datetime.now()) + "\n")
+#-----------------------------------------------------------------------------------------------------------------------------------
+#турбулентное  поле
+Log ("Generating of turbulent magnetic field...\n")
+n = 500
+spacing = 200*au
+origin = Vector3d (-n/2 * spacing, -n/2 * spacing, -n/2 * spacing)
+lMin, lMax = spacing*2, n * spacing 
+Brms = 6*nG
+alpha = -11./3.
+seed = 40
+
+Lc    = turbulentCorrelationLength (lMin, lMax, alpha)
+vGrid = VectorGrid (origin, n, spacing)
+initTurbulence (vGrid, Brms, lMin, lMax, alpha, seed)
+B_turbulent_field = MagneticFieldGrid (vGrid)
+
+Log ("Generating of turbulent magnetic field ended\n")
+
+if (saveMF):
+	Log ("Writing magnetic field into " + path + "/turbfield.mf\n")
+	f2f.FieldToFile (B_turbulent_field, Vector3d(n * spacing, n * spacing, n * spacing), origin, 10, "turbfield.mf")
+	Log ("Writed\n")
+	
+Log("\n")	
+
+#-----------------------------------------------------------------------------------------------------------------------------------
+
+#-----------------------------------------------------------------------------------------------------------------------------------
+
+Log ("\nEnd logging at " + str(datetime.now()) + "\n")
 logfile.close()
