@@ -12,20 +12,22 @@ print 'started'
 
 fin = open (sys.argv[1], "r")
 
-max_step = float(fin.readline())
+max_step = float(fin.readline()) * 0.1
 
-gist = np.zeros(1000)
+resolution = 1000
+
+gist = np.zeros(resolution)
 
 for line in fin:
 	val = float(line)
-	for i in range (1000):
-		if (i < (val / max_step * 1000) and (val / max_step  * 1000) <= i + 1):
+	for i in range (resolution):
+		if (i < (val / max_step * resolution) and (val / max_step  * resolution) <= i + 1):
 			gist[i] += 1
-			
+
 fin.close()
 fout = open (sys.argv[1] + "_o.csv", "w")
 
-for i in range (1000):
-	fout.write ("%f\t%f\n"%(float(i) / 1000., gist[i]))
+for i in range (resolution):
+	fout.write ("%f\t%f\n"%(float(i) / float(resolution), gist[i]))
 
 fout.close()

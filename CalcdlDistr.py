@@ -58,12 +58,12 @@ print 'end B_field'
 
 sim = ModuleList()
 
-max_step = 0.1 * pc
+max_step = 1 * pc
 
 lsave = SaveL(max_step, 'dl.csv')
 sim.add (lsave)
 
-sim.add (PropagationCK (Bfield, 10e-11, 10*au, 1*pc))
+sim.add (PropagationCK (Bfield, 10e-5, 10*au, max_step))
 sim.add (MaximumTrajectoryLength (100*pc))
 
 # source setup

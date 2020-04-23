@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 
 import sys
 
+import crpropa as cr
+
 #-----------------------------------------------------------------------------------------------------------------------------------
 
 def MakeGraph (X, Y, fname):
@@ -23,8 +25,9 @@ if (len(sys.argv) < 2):
 	print 'No input file'
 	exit()
 	
-
 print 'started'
 
 X,Y = np.genfromtxt(sys.argv[1], unpack=True, skip_footer=1)
-MakeGraph (X, Y, sys.argv[1] + '.png')
+
+
+MakeGraph (X[0:30], Y[0:30], sys.argv[1] + '.png')
