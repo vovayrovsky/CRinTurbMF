@@ -15,23 +15,43 @@ import os
 import math
 
 #-----------------------------------------------------------------------------------------------------------------------------------
+
+def DoSimulation (turb_field, B, Mu, particle_num):
+	Log ("Simultaion B = " + str (b) + " Mu = " + str (Mu) + " with " + str (particle_num)" particles at " + str (datetime.now()) +"\n")
+	
+	#Магнитное поле
+	ConstMagVec = Vector3d (B*nG, 0*nG, 0*nG)
+	B_const_field = UniformMagneticField (ConstMagVec)
+
+	Bfield = MagneticFieldList()
+	Bfield.addField (B_turbulent_field)
+	Bfield.addField (B_const_field)
+	
+	sim = ModuleList()
+
+	Log ("\n")
+
+
+#-----------------------------------------------------------------------------------------------------------------------------------
+
 def Log(str):
 	global logfile
 	logfile.write(str)
 	sys.stdout.write(str)
 	return
+	
 #-----------------------------------------------------------------------------------------------------------------------------------
 
 def createParser():
 	parser = argparse.ArgumentParser()
 	parser.add_argument ('-mf', '--mfield', action = 'store_true', default = False, help = 'Enabling saving turbulent part of magnetic field and trajectories for visualisation')
 	
-	parser.add_argument ('-bm', '--minB',   action = 'store', default = 0.0, type = float, help = 'starting B value')
-	parser.add_argument ('-mb', '--maxB',   action = 'store', default = 6.0, type = float, help = 'final B value')
+	parser.add_argument ('-bm', '--minB',   action = 'store', default = 0.0, type = float, help = 'starting B value in nG')
+	parser.add_argument ('-mb', '--maxB',   action = 'store', default = 6.0, type = float, help = 'final B value in nG')
 	parser.add_argument ('-bs', '--stepsB', action = 'store', default = 60,  type = int,   help = 'B steps')
 	
-	parser.add_argument ('-mum', '--minMu',   action = 'store', default = 0.0,       type = float, help = 'starting Mu value')
-	parser.add_argument ('-mmu', '--maxMu',   action = 'store', default = math.pi/2, type = float, help = 'final Mu value')
+	parser.add_argument ('-mum', '--minMu',   action = 'store', default = 0.0,       type = float, help = 'starting Mu value in radians')
+	parser.add_argument ('-mmu', '--maxMu',   action = 'store', default = math.pi/2, type = float, help = 'final Mu value in radians')
 	parser.add_argument ('-mus', '--stepsMu', action = 'store', default = 20,        type = int,   help = 'Mu steps')
 	 
 	parser.add_argument ('-np', '--particles', action = 'store', default = 2, type = int, help = 'number of particles for one step')
@@ -71,12 +91,12 @@ num_of_part = params.particles
 #-----------------------------------------------------------------------------------------------------------------------------------
 
 logfile = open ("log.txt", "w")
-Log ("Start logging at " + str(datetime.now()) + "\n");
+Log ("Start logging at " + str (datetime.now()) + "\n");
 Log ("Output dir is " + path + "\n\n");
 
 Log ("Simulation parameters:\n");
-Log ("B from "  + str(minB)  + " to " + str(maxB)  + " with " + str(stepsB)  + " steps\n")
-Log ("Mu from " + str(minMu) + " to " + str(maxMu) + " with " + str(stepsMu) + " steps\n")
+Log ("B from "  + str (minB)  + " to " + str (maxB)  + " with " + str (stepsB)  + " steps\n")
+Log ("Mu from " + str (minMu) + " to " + str (maxMu) + " with " + str (stepsMu) + " steps\n")
 Log ("Saving of magnetic filed is " + ("enabled" if saveMF  else "disabled") + "\n\n")
 
 #-----------------------------------------------------------------------------------------------------------------------------------
@@ -106,7 +126,9 @@ Log("\n")
 
 #-----------------------------------------------------------------------------------------------------------------------------------
 
+
+
 #-----------------------------------------------------------------------------------------------------------------------------------
 
-Log ("\nEnd logging at " + str(datetime.now()) + "\n")
+Log ("\nEnd logging at " + str (datetime.now()) + "\n")
 logfile.close()
