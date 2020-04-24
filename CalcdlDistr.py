@@ -63,7 +63,7 @@ max_step = 1 * pc
 lsave = SaveL(max_step, 'dl.csv')
 sim.add (lsave)
 
-sim.add (PropagationCK (Bfield, 10e-5, 10*au, max_step))
+sim.add (PropagationCK (Bfield, 10e-5, 1*pc, max_step))
 sim.add (MaximumTrajectoryLength (100*pc))
 
 # source setup

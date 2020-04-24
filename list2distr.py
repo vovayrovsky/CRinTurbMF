@@ -14,20 +14,17 @@ fin = open (sys.argv[1], "r")
 
 max_step = float(fin.readline()) * 0.1
 
-resolution = 1000
-
-gist = np.zeros(resolution)
-
-for line in fin:
-	val = float(line)
-	for i in range (resolution):
-		if (i < (val / max_step * resolution) and (val / max_step  * resolution) <= i + 1):
-			gist[i] += 1
-
 fin.close()
+
+data = np.loadtxt (sys.argv[1], skiprows = 1) 
+
+resolution = 10
+
+hist, bins = np.histogram (data, bins = resolution)
+
 fout = open (sys.argv[1] + "_o.csv", "w")
 
 for i in range (resolution):
-	fout.write ("%f\t%f\n"%(float(i) / float(resolution), gist[i]))
+	fout.write ("%f\t%f\n"%(bins[i], hist[i]))
 
 fout.close()
