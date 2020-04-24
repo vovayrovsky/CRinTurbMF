@@ -77,7 +77,7 @@ source.add (SourceParticleType (nucleusId (1, 1)))
 source.add (SourceEnergy (1 * TeV))
 
 sim.setShowProgress (True)
-sim.run (source, 300)
+sim.run (source, 500)
 
 lsave.close()
 
