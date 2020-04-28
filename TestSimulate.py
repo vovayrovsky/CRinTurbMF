@@ -54,7 +54,7 @@ Bfield.addField (B_turbulent_field)
 Bfield.addField (B_const_field)
 
 print 'end B_field'
-x     
+     
 
 if (params.mfield):
 	f2f.FieldToFile (Bfield, Vector3d(n * spacing, n * spacing, n * spacing), origin, 30, "magnetic_field.mf")
