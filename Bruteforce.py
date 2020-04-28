@@ -26,6 +26,8 @@ def Log(str):
 #-----------------------------------------------------------------------------------------------------------------------------------
 
 def DoSimulation (turb_field, B, Mu, particle_num, energy, length):
+	global spacing
+	global n
 	Log ("Simultaion B = " + str (B) + " Mu = " + str (Mu) + " with " + str (particle_num) + " particles at " + str (datetime.now()) +"\n")
 	
 	#Магнитное поле
@@ -46,8 +48,8 @@ def DoSimulation (turb_field, B, Mu, particle_num, energy, length):
 	
 	# source setup
 	source = Source()
-	#source.add (SourceUniformBox (Vector3d(0.1*n*spacing, 0.2*n*spacing, 0.2*n*spacing),
-	#                              Vector3d(0.5*n*spacing, 0.8*n*spacing, 0.8*n*spacing)))
+	source.add (SourceUniformBox (Vector3d(0.1*n*spacing, 0.2*n*spacing, 0.2*n*spacing),
+	                              Vector3d(0.5*n*spacing, 0.8*n*spacing, 0.8*n*spacing)))
 	
 	#source.add (SourcePosition (Vector3d (0, 0, 0)))
                               	
