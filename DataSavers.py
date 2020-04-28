@@ -38,7 +38,7 @@ class DiffOutput(cr.Module):
 	def __init__ (self, fname, step):
 		cr.Module.__init__ (self)
 		self.fout = open(fname, 'w')
-		self.fout.write ('#i\tL\tD_x\tD_y\tmu\tX\tY\tZn')
+		self.fout.write ('#i\tL\tD_x\tD_y\tmu\tX\tY\tZ\tdl\n')
 		
 		self.step = step
 		self.i = 0
@@ -82,8 +82,8 @@ class DiffOutput(cr.Module):
 		self.Diff_coeff_x += x * cr.pc * V_x
 		self.Diff_coeff_y += y * cr.pc * V_y
 		
-		self.fout.write('%i\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n' % (self.i, L, self.Diff_coeff_x / self.count,
-		                                                                 self.Diff_coeff_y / self.count, mu, x, y, z))
+		self.fout.write('%i\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n' % (self.i, L, self.Diff_coeff_x / self.count,
+		                                                                 self.Diff_coeff_y / self.count, mu, x, y, z, c.getCurrentStep()))
 		
 	def close(self):
 		self.fout.close()
