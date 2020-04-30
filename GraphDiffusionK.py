@@ -8,6 +8,7 @@ from pylab import *
 from mpl_toolkits.mplot3d import axes3d
 from mayavi import mlab
 import os
+import sys
 
 from crpropa import *
 
@@ -16,34 +17,38 @@ from crpropa import *
 def MakeGraph (X, Y, fname):
 	plt.figure (figsize = (12,12))
 	plt.subplot()
-	plt.plot (X, Y)
+        plt.scatter (X, Y, s=0.1)
 	plt.savefig (fname)
 	print 'Generated ' + fname
 	return
 
 #-----------------------------------------------------------------------------------------------------------------------------------
 
-if (not os.path.isdir("output")): os.mkdir("output")
-os.chdir("output")
-
 print 'started'
 
-i,L,D_x,D_y,mu,x,y,z = np.genfromtxt('my_diff_trajectory.txt', unpack=True, skip_footer=1)
+if (len(sys.argv) < 2):
+	print 'No input file'
+	exit(0)
 
-Diff_xx = np.cumsum (D_x) 
+i,L,D_x,D_y,mu,x,y,z, dl = np.genfromtxt (sys.argv[1], unpack=True, skip_footer=1)
 
-Norm = np.linspace(1,  Diff_xx.size, Diff_xx.size)
+if (not os.path.isdir(sys.argv[1]+"dir")): os.mkdir(sys.argv[1]+"dir")
+os.chdir(sys.argv[1]+"dir")
 
-Diff_xx_norm = Diff_xx/Norm
+#Diff_xx = np.cumsum (D_x) 
+
+#Norm = np.linspace (1,  Diff_xx.size, Diff_xx.size)
+
+#Diff_xx_norm = Diff_xx/Norm
 
 # plot trajectories
 MakeGraph (L, (L - x), 'demo_coord.png')
 
 #  plot Diff_x
-MakeGraph ((L + i * pc)/pc, D_x, 'Diff_X_scatter.png')
+MakeGraph ((L)/pc, D_x, 'Diff_X_scatter.png')
 
 #  plot Diff_y
-MakeGraph ((L + i * pc)/pc, D_y, 'Diff_Y_scatter.png')
+MakeGraph ((L)/pc, D_y, 'Diff_Y_scatter.png')
 
 #  plot Diff_mu
-MakeGraph ((L + i * pc)/pc, mu, 'Diff_angle.png')
+MakeGraph ((L)/pc, mu, 'Diff_angle.png')
