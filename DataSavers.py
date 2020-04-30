@@ -47,11 +47,19 @@ class DiffOutput(cr.Module):
 		
 		self.Diff_coeff_x = 0
 		self.Diff_coeff_y = 0
+		self.current_id = 0
 	
 	def process (self, c):
 		if (self.i < self.step):
 			self.i += 1
 			return
+		
+		if (self.current_id != c.getSerialNumber()):
+			self.current_id = c.getSerialNumber()
+			self.Diff_coeff_x = 0
+			self.Diff_coeff_y = 0
+			self.count = 0
+			print 'New particle'
 		
 		self.i = 1	
 		
