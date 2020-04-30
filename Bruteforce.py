@@ -160,6 +160,7 @@ Log ("Starting simulation cycle\n\n")
 for B in np.linspace(minB, maxB, num = stepsB):
 	for Mu in np.linspace(minMu, maxMu, num = stepsMu):
 		DoSimulation (B_turbulent_field, B, Mu, num_of_part, energy, tr_length)
+		logfile.flush()
 		
 Log ("\nSimulation end\n")
 		
