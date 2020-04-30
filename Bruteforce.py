@@ -31,7 +31,7 @@ def DoSimulation (turb_field, B, Mu, particle_num, energy, length):
 	Log ("Simultaion B = " + str (B) + " Mu = " + str (Mu) + " with " + str (particle_num) + " particles at " + str (datetime.now()) +"\n")
 	
 	#Магнитное поле
-	ConstMagVec = Vector3d (B*nG, 0*nG, 0*nG)
+	ConstMagVec = Vector3d (B*muG, 0*muG, 0*muG)
 	B_const_field = UniformMagneticField (ConstMagVec)
 
 	Bfield = MagneticFieldList()
@@ -69,8 +69,8 @@ def createParser():
 	parser = argparse.ArgumentParser()
 	parser.add_argument ('-mf', '--mfield', action = 'store_true', default = False, help = 'Enabling saving turbulent part of magnetic field and trajectories for visualisation')
 	
-	parser.add_argument ('-bm', '--minB',   action = 'store', default = 0.0, type = float, help = 'starting B value in nG')
-	parser.add_argument ('-mb', '--maxB',   action = 'store', default = 6.0, type = float, help = 'final B value in nG')
+	parser.add_argument ('-bm', '--minB',   action = 'store', default = 0.0, type = float, help = 'starting B value in muG')
+	parser.add_argument ('-mb', '--maxB',   action = 'store', default = 6.0, type = float, help = 'final B value in muG')
 	parser.add_argument ('-bs', '--stepsB', action = 'store', default = 60,  type = int,   help = 'B steps')
 	
 	parser.add_argument ('-mum', '--minMu',   action = 'store', default = 0.0,       type = float, help = 'starting Mu value in radians')
@@ -135,7 +135,7 @@ n = 500
 spacing = 200*au
 origin = Vector3d (-n/2 * spacing, -n/2 * spacing, -n/2 * spacing)
 lMin, lMax = spacing*2, n * spacing 
-Brms = 6*nG
+Brms = 6*muG
 alpha = -11./3.
 seed = 40
 
