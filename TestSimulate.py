@@ -55,6 +55,7 @@ Bfield.addField (B_const_field)
 
 print 'end B_field'
      
+sim = ModuleList()
 
 if (params.mfield):
 	f2f.FieldToFile (Bfield, Vector3d(n * spacing, n * spacing, n * spacing), origin, 30, "magnetic_field.mf")
@@ -67,22 +68,22 @@ diffoutput = DiffOutput ('my_diff_trajectory.txt', 10)
 sim.add (diffoutput)
 
 sim.add (PropagationCK (Bfield, 10e-11, 10*au, 1*pc))
-sim.add (MaximumTrajectoryLength (100*pc))
+sim.add (MaximumTrajectoryLength (10*pc))
 
 # source setup
 source = Source()
-#source.add (SourceUniformBox (Vector3d(0.1*n*spacing, 0.2*n*spacing, 0.2*n*spacing),
-#                              Vector3d(0.5*n*spacing, 0.8*n*spacing, 0.8*n*spacing)))
+source.add (SourceUniformBox (Vector3d(0.1*n*spacing, 0.2*n*spacing, 0.2*n*spacing),
+                              Vector3d(0.5*n*spacing, 0.8*n*spacing, 0.8*n*spacing)))
 
-source.add (SourcePosition (Vector3d (0, 0, 0)))
+#source.add (SourcePosition (Vector3d (0, 0, 0)))
                               
-source.add (SourceDirection (Vector3d (1, 1, 0)))
+source.add (SourceDirection (Vector3d (1, 0, 0)))
 source.add (SourceParticleType (nucleusId (1, 1)))
 
 source.add (SourceEnergy (1 * TeV))
 
 sim.setShowProgress (True)
-sim.run (source, 1)
+sim.run (source, 20)
 
 #output.close()
 
