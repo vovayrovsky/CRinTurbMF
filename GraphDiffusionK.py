@@ -3,6 +3,8 @@
 
 import numpy as np
 import tk
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from pylab import *
 import os
