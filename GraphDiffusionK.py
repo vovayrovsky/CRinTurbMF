@@ -30,7 +30,8 @@ if (len(sys.argv) < 2):
 	print 'No input file'
 	exit(0)
 
-id,L,D_x,D_y,mu,x,y,z, dl = np.genfromtxt (sys.argv[1], unpack=True, skip_footer=1)
+#id,L,D_x,D_y,mu,x,y,z, dl = np.genfromtxt (sys.argv[1], unpack=True, skip_footer=1)
+L,D_x,D_y = np.genfromtxt (sys.argv[1], unpack=True)
 
 if (not os.path.isdir(sys.argv[1]+"dir")): os.mkdir(sys.argv[1]+"dir")
 os.chdir(sys.argv[1]+"dir")
@@ -42,7 +43,7 @@ os.chdir(sys.argv[1]+"dir")
 #Diff_xx_norm = Diff_xx/Norm
 
 # plot trajectories
-MakeGraph (L, (L - x), 'demo_coord.png')
+#MakeGraph (L, (L - x), 'demo_coord.png')
 
 #  plot Diff_x
 MakeGraph ((L)/pc, D_x, 'Diff_X_scatter.png')
@@ -51,4 +52,4 @@ MakeGraph ((L)/pc, D_x, 'Diff_X_scatter.png')
 MakeGraph ((L)/pc, D_y, 'Diff_Y_scatter.png')
 
 #  plot Diff_mu
-MakeGraph ((L)/pc, mu, 'Diff_angle.png')
+#MakeGraph ((L)/pc, mu, 'Diff_angle.png')
