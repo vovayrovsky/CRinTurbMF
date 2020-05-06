@@ -13,7 +13,7 @@ import os
 
 def createParser ():
     parser = argparse.ArgumentParser()
-    parser.add_argument ('-mf', '--mfield', action='store_true', default = False, help = 'Enabling saving magnetic field and trajectory')
+    parser.add_argument ('-mf', '--mfield', action='store_true', default = False, help = 'EnablimuG savimuG magnetic field and trajectory')
  
     return parser
 
@@ -26,26 +26,26 @@ cargpars = createParser();
 params = cargpars.parse_args(sys.argv[1:])
 
 if (params.mfield):
-	print 'started with saving magnetic field'
+	print 'started with savimuG magnetic field'
 else:
 	print 'started'
 	
 #турбулентное  поле
 n = 500
-spacing = 200*au
-origin = Vector3d (-n/2 * spacing, -n/2 * spacing, -n/2 * spacing)
-lMin, lMax = spacing*2, n * spacing 
-Brms = 6*nG
+spacimuG = 200*au
+origin = Vector3d (-n/2 * spacimuG, -n/2 * spacimuG, -n/2 * spacimuG)
+lMin, lMax = spacimuG*2, n * spacimuG 
+Brms = 6*muG
 alpha = -11./3.
 seed = 40
 
 Lc = turbulentCorrelationLength (lMin, lMax, alpha)
-vGrid = VectorGrid (origin, n, spacing)
+vGrid = VectorGrid (origin, n, spacimuG)
 initTurbulence (vGrid, Brms, lMin, lMax, alpha, seed)
 B_turbulent_field = MagneticFieldGrid (vGrid)
 
 #тянущее поле
-ConstMagVec = Vector3d (6*nG, 0*nG, 0*nG)
+ConstMagVec = Vector3d (6*muG, 0*muG, 0*muG)
 B_const_field = UniformMagneticField (ConstMagVec)
 
 #общее поле
@@ -58,22 +58,22 @@ print 'end B_field'
 sim = ModuleList()
 
 if (params.mfield):
-	f2f.FieldToFile (Bfield, Vector3d(n * spacing, n * spacing, n * spacing), origin, 30, "magnetic_field.mf")
+	f2f.FieldToFile (Bfield, Vector3d(n * spacimuG, n * spacimuG, n * spacimuG), origin, 30, "magnetic_field.mf")
 	print 'B_field writed to file magnetic_field.mf'
 	
 	myoutput = StepOutput ('my_trajectory.txt', 100)
 	sim.add (myoutput)
 
-diffoutput = DiffOutput ('my_diff_trajectory.txt', 10)
+diffoutput = DiffOutput ('my_diff_trajectory.txt', 200, append = False)
 sim.add (diffoutput)
 
 sim.add (PropagationCK (Bfield, 10e-11, 10*au, 1*pc))
-sim.add (MaximumTrajectoryLength (10*pc))
+sim.add (MaximumTrajectoryLength (50*pc))
 
 # source setup
 source = Source()
-source.add (SourceUniformBox (Vector3d(0.1*n*spacing, 0.2*n*spacing, 0.2*n*spacing),
-                              Vector3d(0.5*n*spacing, 0.8*n*spacing, 0.8*n*spacing)))
+source.add (SourceUniformBox (Vector3d(-2 * spacimuG, - 2 * spacimuG, -2 * spacimuG),
+                              Vector3d(4 * spacimuG, 4 * spacimuG, 4 * spacimuG)))
 
 #source.add (SourcePosition (Vector3d (0, 0, 0)))
                               

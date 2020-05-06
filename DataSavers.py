@@ -35,10 +35,11 @@ class StepOutput(cr.Module):
 #-----------------------------------------------------------------------------------------------------------------------------------
 
 class DiffOutput(cr.Module):
-	def __init__ (self, fname, step):
+	def __init__ (self, fname, step, append = False):
 		cr.Module.__init__ (self)
-		self.fout = open(fname, 'w')
-		self.fout.write ('#i\tL\tD_x\tD_y\tmu\tX\tY\tZ\tdl\n')
+		self.fout = open(fname, 'a+' if append else 'w')
+		if not append:
+			self.fout.write ('#id\tL\tD_x\tD_r\tmu\tX\tY\tZ\tdl\n')
 		
 		self.step = step
 		self.i = 0
@@ -46,22 +47,18 @@ class DiffOutput(cr.Module):
 		self.count = 0
 		
 		self.Diff_coeff_x = 0
-		self.Diff_coeff_y = 0
+		self.Diff_coeff_r = 0
 		self.current_id = 0
 	
 	def process (self, c):
-		if (self.i < self.step):
-			self.i += 1
-			return
 		
 		if (self.current_id != c.getSerialNumber()):
 			self.current_id = c.getSerialNumber()
 			self.Diff_coeff_x = 0
-			self.Diff_coeff_y = 0
-			self.count = 0
-			print 'New particle'
-		
-		self.i = 1	
+			self.Diff_coeff_r = 0
+			self.count = 1
+			self.i = self.step	
+			#print 'New particle'
 		
 		L = c.getTrajectoryLength()
 	
@@ -88,10 +85,16 @@ class DiffOutput(cr.Module):
 		
 		self.count += 1
 		self.Diff_coeff_x += x * cr.pc * V_x
-		self.Diff_coeff_y += y * cr.pc * V_y
+		self.Diff_coeff_r += y * cr.pc * V_y
 		
-		self.fout.write('%i\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n' % (self.i, L, self.Diff_coeff_x / self.count,
-		                                                                 self.Diff_coeff_y / self.count, mu, x, y, z, c.getCurrentStep()))
+		if (self.i < self.step):
+			self.i += 1
+			return
+			
+		self.i = 1	
+		
+		self.fout.write('%i\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n' % (self.current_id, L, self.Diff_coeff_x / self.count,
+		                                                                 self.Diff_coeff_r / self.count, mu, x, y, z, c.getCurrentStep()))
 		
 	def close(self):
 		self.fout.close()

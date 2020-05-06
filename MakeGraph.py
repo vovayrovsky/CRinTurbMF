@@ -12,10 +12,11 @@ import crpropa as cr
 #-----------------------------------------------------------------------------------------------------------------------------------
 
 def MakeGraph (X, Y, fname):
-	plt.figure (figsize = (24,24))
+	print 'Start generating ' + fname
+	plt.figure (figsize = (12, 12))
 	plt.subplot()
-	plt.tick_params(axis='both', which='major', labelsize=30)
-	plt.bar (X, Y, width = 0.1*X[-1])
+	#plt.tick_params (axis='both', which='major', labelsize=30)
+	plt.scatter (X, Y)
 	plt.savefig (fname)
 	print 'Generated ' + fname
 	return
@@ -28,8 +29,14 @@ if (len(sys.argv) < 2):
 	
 print 'started'
 
-X,Y = np.genfromtxt(sys.argv[1], unpack=True)
+id,L,D_x,D_y,mu,X,Y,Z, dl = np.genfromtxt (sys.argv[1], unpack=True)
 
-X /= 1 * cr.pc
+#X /= 1 * cr.pc
+#Y /= 1 * cr.pc
+#Z /= 1 * cr.pc
 
-MakeGraph (X, Y, sys.argv[1] + '.png')
+R = np.sqrt(Y ** 2 + Z ** 2)
+
+MakeGraph (X, R, sys.argv[1] + 'XR.png')
+MakeGraph (X, Y, sys.argv[1] + 'XY.png')
+MakeGraph (X, Z, sys.argv[1] + 'XZ.png')

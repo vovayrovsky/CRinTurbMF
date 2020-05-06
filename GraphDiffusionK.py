@@ -17,7 +17,7 @@ from crpropa import *
 def MakeGraph (X, Y, fname):
 	plt.figure (figsize = (12,12))
 	plt.subplot()
-        plt.scatter (X, Y, s=0.1)
+	plt.scatter (X, Y, s=1)
 	plt.savefig (fname)
 	print 'Generated ' + fname
 	return
@@ -30,7 +30,7 @@ if (len(sys.argv) < 2):
 	print 'No input file'
 	exit(0)
 
-i,L,D_x,D_y,mu,x,y,z, dl = np.genfromtxt (sys.argv[1], unpack=True, skip_footer=1)
+id,L,D_x,D_y,mu,x,y,z, dl = np.genfromtxt (sys.argv[1], unpack=True, skip_footer=1)
 
 if (not os.path.isdir(sys.argv[1]+"dir")): os.mkdir(sys.argv[1]+"dir")
 os.chdir(sys.argv[1]+"dir")
