@@ -23,7 +23,7 @@ int main(int argc, char** argv)
 
     if (fin == NULL)
         {
-        printf ("Input file doesn't exists\n");
+        printf ("Input file doesn't exist\n");
         return 0;
         }
     printf ("started\n");
