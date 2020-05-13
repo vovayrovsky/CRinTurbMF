@@ -17,7 +17,7 @@ from crpropa import *
 def MakeGraph (X, Y, fname):
 	plt.figure (figsize = (12,12))
 	plt.subplot()
-	plt.scatter (X, Y, s=1)
+	plt.scatter (X, Y, s=5)
 	plt.savefig (fname)
 	print 'Generated ' + fname
 	return
