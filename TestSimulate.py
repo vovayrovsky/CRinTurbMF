@@ -26,21 +26,21 @@ cargpars = createParser();
 params = cargpars.parse_args(sys.argv[1:])
 
 if (params.mfield):
-	print 'started with savimuG magnetic field'
+	print 'started with saving magnetic field'
 else:
 	print 'started'
 	
 #турбулентное  поле
 n = 500
-spacimuG = 200*au
-origin = Vector3d (-n/2 * spacimuG, -n/2 * spacimuG, -n/2 * spacimuG)
-lMin, lMax = spacimuG*2, n * spacimuG 
+spacing = 200*au
+origin = Vector3d (-n/2 * spacing, -n/2 * spacing, -n/2 * spacing)
+lMin, lMax = spacing*2, n * spacing 
 Brms = 6*muG
 alpha = -11./3.
 seed = 40
 
 Lc = turbulentCorrelationLength (lMin, lMax, alpha)
-vGrid = VectorGrid (origin, n, spacimuG)
+vGrid = VectorGrid (origin, n, spacing)
 initTurbulence (vGrid, Brms, lMin, lMax, alpha, seed)
 B_turbulent_field = MagneticFieldGrid (vGrid)
 
@@ -58,7 +58,7 @@ print 'end B_field'
 sim = ModuleList()
 
 if (params.mfield):
-	f2f.FieldToFile (Bfield, Vector3d(n * spacimuG, n * spacimuG, n * spacimuG), origin, 30, "magnetic_field.mf")
+	f2f.FieldToFile (Bfield, Vector3d(n * spacing, n * spacing, n * spacing), origin, 30, "magnetic_field.mf")
 	print 'B_field writed to file magnetic_field.mf'
 	
 	myoutput = StepOutput ('my_trajectory.txt', 100)
@@ -72,8 +72,8 @@ sim.add (MaximumTrajectoryLength (50*pc))
 
 # source setup
 source = Source()
-source.add (SourceUniformBox (Vector3d(-2 * spacimuG, - 2 * spacimuG, -2 * spacimuG),
-                              Vector3d(4 * spacimuG, 4 * spacimuG, 4 * spacimuG)))
+source.add (SourceUniformBox (Vector3d(-2 * spacing, - 2 * spacing, -2 * spacing),
+                              Vector3d(4 * spacing, 4 * spacing, 4 * spacing)))
 
 #source.add (SourcePosition (Vector3d (0, 0, 0)))
                               
