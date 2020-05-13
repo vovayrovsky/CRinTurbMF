@@ -83,7 +83,7 @@ source.add (SourceParticleType (nucleusId (1, 1)))
 source.add (SourceEnergy (1 * TeV))
 
 sim.setShowProgress (True)
-sim.run (source, 5)
+sim.run (source, 50)
 
 #output.close()
 
